@@ -11,22 +11,15 @@ export interface Movie {
 
 function Home() {
     const [movies, setMovies] = useState<Movie[]>([]);
-    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [searchTerm, setSearchTerm] = useState<string>( "");
 
     useEffect(() => {
        setMovies(moviesData);
     }, []);
-
-    useEffect(() => {
-        if (searchTerm) {
-            const filteredMovies = moviesData.filter(movie =>
-                movie.title.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            setMovies(filteredMovies);
-        } else {
-            setMovies(moviesData);
-        }
-    }, [searchTerm]);
+    
+    const filteredMovies = searchTerm ? movies.filter(movie =>
+        movie.title.toLowerCase().includes(searchTerm.toLowerCase())
+    ) : movies;
 
   return (
     <div>
@@ -38,7 +31,7 @@ function Home() {
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
-      {movies.map(movie => (
+      {filteredMovies.map(movie => (
         <MovieCard key={movie.id} {...movie} />
       ))}
     </div>
